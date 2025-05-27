@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Soruları Çöz Hediyeni Al</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #222;
+    overflow-x: hidden;
+  }
+
+  .container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-width: 700px;
+    width: 90%;
+    padding: 40px 50px;
+    text-align: center;
+    user-select: none;
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    background: -webkit-linear-gradient(45deg, #f72585, #720026);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 1.9rem;
+    margin-bottom: 0.3em;
+  }
+
+  p {
+    font-size: 1.15rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .question {
+    margin-bottom: 25px;
+  }
+
+  input[type="text"] {
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #f72585;
+    box-shadow: 0 0 8px #f72585cc;
+  }
+
+  button {
+    background: linear-gradient(45deg, #f72585, #720026);
+    border: none;
+    color: white;
+    padding: 14px 30px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.4s ease;
+    box-shadow: 0 8px 15px rgba(247, 37, 133, 0.5);
+    user-select: none;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  button:hover:not(:disabled) {
+    background: linear-gradient(45deg, #d90466, #5a001f);
+  }
+
+  .feedback {
+    font-size: 1rem;
+    margin-top: 10px;
+    font-weight: 600;
+    height: 24px;
+    color: #4caf50;
+  }
+  .feedback.error {
+    color: #e63946;
+  }
+
+  .progress {
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #720026cc;
+  }
+
+  /* Gift box styles */
+  .gift-box-container {
+    position: relative;
+    margin-top: 30px;
+  }
+  .gift-box {
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(135deg, #f72585, #720026);
+    border-radius: 40px 40px 10px 10px;
+    box-shadow: 0 12px 25px rgba(247,37,133,0.6);
+    margin: 0 auto;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    box-sizing: border-box;
+    padding-top: 30px;
+  }
+  .gift-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(247,37,133,0.9);
+  }
+
+  .lock {
+    background: #222;
+    color: #f72585;
+    font-weight: 600;
+    border-radius: 15px;
+    width: 90px;
+    height: 55px;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    text-align: center;
+    border: 3px solid #f72585;
+    margin: 20px auto 10px;
+    user-select: text;
+  }
+
+  .lock-input {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #f72585;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #720026;
+    margin-bottom: 15px;
+    letter-spacing: 8px;
+  }
+
+  .lock-input:focus {
+    outline: none;
+    border-color: #ff598f;
+    box-shadow: 0 0 8px #ff598faa;
+  }
+
+  .btn-unlock {
+    padding: 10px 30px;
+    font-weight: 700;
+    border-radius: 25px;
+    border: none;
+    background: #ff598f;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.4s ease;
+  }
+  .btn-unlock:hover {
+    background: #d43374;
+  }
+
+  .hint {
+    font-size: 0.95rem;
+    color: #fde2e4;
+    background-color: #720026cc;
+    padding: 8px 15px;
+    border-radius: 15px;
+    width: fit-content;
+    margin: 15px auto 0;
+    user-select: none;
+  }
+
+  .opened-message {
+    margin-top: 25px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #720026cc;
+    line-height: 1.4;
+  }
+
+  /* Confetti container */
+  .confetti-container {
+    position: fixed;
+    pointer-events: none;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    overflow: visible;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container {
+      padding: 30px 25px;
+    }
+    h1 {
+      font-size: 2.1rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 12px 25px;
+    }
+    .gift-box {
+      width: 180px;
+      height: 180px;
+      font-size: 1.1rem;
+      border-radius: 30px 30px 10px 10px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main" aria-live="polite">
+    <h1>Soruları Çöz Hediyeyi Al</h1>
+    <div class="progress" id="progress">1 / 6 Adım</div>
+
+    <div id="question-container">
+      <div class="question" id="question-text"></div>
+      <input
+        type="text"
+        id="answer-input"
+        placeholder="Cevabını yaz..."
+        aria-label="Bulmaca cevabı"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="submit-btn">Cevapla</button>
+      <div id="feedback" class="feedback" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <div id="gift-container" style="display:none;">
+      <h2>Hediye Kutusu</h2>
+      <div class="gift-box" tabindex="0" role="region" aria-label="Hediye kutusu">
+        🎁🎀
+        <input
+          type="password"
+          id="lock-password"
+          maxlength="4"
+          class="lock-input"
+          placeholder="----"
+          aria-label="Hediye kutusu şifresi"
+        />
+        <button id="unlock-btn" class="btn-unlock">Kilidi Aç</button>
+        <div class="hint">İpucu: Gerçek hayatta sahip olduğumuz bir kutunun şifresi</div>
+      </div>
+      <div id="open-message" class="opened-message" aria-live="polite"></div>
+    </div>
+  </div>
+
+<script>
+  (() => {
+    'use strict';
+
+    const questions = [
+      {
+        question: "Sevgilinin ablasının adı nedir?",
+        answer: "merve"
+      },
+      {
+        question: "Sevgilinin en sevdiği bilgisayar oyunu hangisi?",
+        answer: "valorant"
+      },
+      {
+        question: "Sevgilinle ilk yalnız fotoğrafınızı nerede çektiniz?",
+        answer: "üniversite kampüsünde"
+      },
+      {
+        question: "Sevgilinin en sevdiği spor dalı?",
+        answer: "futbol"
+      },
+      {
+        question: "Sevgilinle ikinizin şarkısı?(Sanatçı ile birlikte yazınız)",
+        answer: "barış akarsu merhaba"
+      },
+      {
+        question: "Sevgilinin sana yazdığı ilk şiirin adı?",
+        answer: "seni seviyorum"
+      }
+    ];
+
+    const giftPassword = "7452";
+
+    // DOM elements
+    const questionText = document.getElementById('question-text');
+    const answerInput = document.getElementById('answer-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const feedback = document.getElementById('feedback');
+    const progress = document.getElementById('progress');
+    const giftContainer = document.getElementById('gift-container');
+    const unlockBtn = document.getElementById('unlock-btn');
+    const lockPasswordInput = document.getElementById('lock-password');
+    const openMessage = document.getElementById('open-message');
+
+    let currentStep = 0;
+
+    function normalizeText(text) {
+      return text.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function updateProgress() {
+      progress.textContent = `${currentStep + 1} / ${questions.length} Adım`;
+    }
+
+    function showQuestion() {
+      feedback.textContent = "";
+      answerInput.value = "";
+      answerInput.disabled = false;
+      submitBtn.disabled = false;
+      answerInput.focus();
+      questionText.textContent = questions[currentStep].question;
+      updateProgress();
+    }
+
+    function showGift() {
+      document.getElementById('question-container').style.display = "none";
+      giftContainer.style.display = "block";
+      progress.textContent = "Tebrikler! Hediyeye ulaştınız.";
+      lockPasswordInput.focus();
+    }
+
+    function confettiEffect() {
+      const duration = 5 * 1000;
+      const animationEnd = Date.now() + duration;
+      const colors = ['#f72585', '#720026', '#ff9a9e', '#fad0c4'];
+
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      const confettiContainer = document.createElement('div');
+      confettiContainer.className = 'confetti-container';
+      document.body.appendChild(confettiContainer);
+
+      (function frame() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          document.body.removeChild(confettiContainer);
+          return;
+        }
+
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '10px';
+        particle.style.height = '10px';
+        particle.style.backgroundColor = colors[randomInt(0, colors.length - 1)];
+        particle.style.left = Math.random() * window.innerWidth + 'px';
+        particle.style.top = '-20px';
+        particle.style.opacity = '1';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '9999';
+        particle.style.transition = 'all 3s ease-out';
+
+        confettiContainer.appendChild(particle);
+
+        setTimeout(() => {
+          particle.style.top = window.innerHeight + 20 + 'px';
+          particle.style.opacity = '0';
+          particle.style.transform = `rotate(${randomInt(0, 360)}deg) translateX(${randomInt(-100,100)}px)`;
+        }, 0);
+
+        setTimeout(() => {
+          confettiContainer.removeChild(particle);
+        }, 3000);
+
+        requestAnimationFrame(frame);
+      })();
+    }
+
+    submitBtn.addEventListener('click', () => {
+      const userAnswer = normalizeText(answerInput.value);
+      const correctAnswer = normalizeText(questions[currentStep].answer);
+
+      if (!userAnswer) {
+        feedback.textContent = "Lütfen cevabını yaz.";
+        feedback.classList.add('error');
+        return;
+      }
+
+      if (userAnswer === correctAnswer) {
+        feedback.textContent = "Doğru cevap!";
+        feedback.classList.remove('error');
+        currentStep++;
+        if (currentStep < questions.length) {
+          setTimeout(() => {
+            showQuestion();
+          }, 1200);
+        } else {
+          // All questions answered correctly
+          confettiEffect();
+          showGift();
+        }
+      } else {
+        feedback.textContent = "Maalesef, cevap yanlış. Tekrar dene.";
+        feedback.classList.add('error');
+      }
+    });
+
+    // Support enter key trigger on input for answer
+    answerInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' && !submitBtn.disabled) {
+        submitBtn.click();
+      }
+    });
+
+    unlockBtn.addEventListener('click', () => {
+      const enteredPassword = lockPasswordInput.value.trim();
+      if (enteredPassword === giftPassword) {
+        openMessage.textContent = "Birazdan telefonuna bir mesaj gelicek, bir video. O videoyu izle ve videoda söylenenleri yap.❤️";
+        unlockBtn.disabled = true;
+        lockPasswordInput.disabled = true;
+        confettiEffect();
+      } else {
+        openMessage.textContent = "❌ Yanlış şifre, tekrar dene.";
+      }
+    });
+
+    // Support enter key on gift password input
+    lockPasswordInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' && !unlockBtn.disabled) {
+        unlockBtn.click();
+      }
+    });
+
+    // Initialize first question on page load
+    showQuestion();
+  })();
+</script>
+</body>
+</html>
+
